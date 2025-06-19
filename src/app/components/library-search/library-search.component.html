@@ -1,0 +1,93 @@
+<div class="library-search-container">
+  <div class="content">
+    <p-card header="Поиск" class="search-card">
+      <div class="search-form">
+        <div class="p-inputgroup">
+          <input
+            type="text"
+            pInputText
+            [formControl]="searchControl"
+            placeholder="Введите название библиотеки..."
+            class="search-input"
+            (keydown.enter)="searchLibraries()"
+          />
+          <button
+            pButton
+            type="button"
+            label="Найти"
+            (click)="searchLibraries()"
+            [disabled]="!searchControl.value || isSearching"
+            class="p-button-primary search-button"
+            aria-label="Найти библиотеки"
+          ></button>
+        </div>
+      </div>
+    </p-card>
+
+    <p-card *ngIf="isSearching" header="Идёт поиск" class="results-card">
+      <div class="loading-message">
+        <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+        <p>Поиск библиотек...</p>
+      </div>
+    </p-card>
+
+    <p-card
+      *ngIf="noResults && hasSearched && !isSearching"
+      header="Результаты поиска"
+      class="results-card"
+    >
+      <div class="no-results-message">
+        <i
+          class="pi pi-exclamation-triangle"
+          style="font-size: 2rem; color: #ff6b6b"
+        ></i>
+        <h3>Ничего не найдено</h3>
+        <p>
+          По запросу <strong>"{{ currentSearchTerm }}"</strong> библиотеки не
+          найдены.
+        </p>
+        <p>Попробуйте изменить поисковый запрос.</p>
+      </div>
+    </p-card>
+
+    <p-card
+      *ngIf="libraries$ | async as libraries"
+      header="Результаты поиска"
+      class="results-card"
+      [hidden]="libraries.length === 0 || isSearching || noResults"
+    >
+      <p-table
+        [value]="libraries"
+        [responsive]="true"
+        styleClass="p-datatable-gridlines"
+        [rows]="10"
+        [paginator]="true"
+        [showCurrentPageReport]="true"
+        currentPageReportTemplate="Показано {first} - {last} из {totalRecords} записей"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 80px">№</th>
+            <th>Название</th>
+            <th>Адрес</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-library let-rowIndex="rowIndex">
+          <tr
+            (click)="selectLibrary(library)"
+            style="cursor: pointer"
+            class="library-row"
+          >
+            <td>{{ rowIndex + 1 }}</td>
+            <td
+              [innerHTML]="
+                library.Cells.FullName | highlightSearch: currentSearchTerm
+              "
+            ></td>
+            <td>{{ getLibraryAddress(library) }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-card>
+  </div>
+</div>

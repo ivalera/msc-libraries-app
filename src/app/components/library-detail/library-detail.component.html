@@ -1,0 +1,67 @@
+<div class="library-detail-container" *ngIf="selectedLibrary">
+  <p-card class="library-detail-card">
+    <ng-template pTemplate="header">
+      <div class="card-header">
+        <h2>{{ selectedLibrary.Cells.FullName }}</h2>
+        <button
+          pButton
+          type="button"
+          icon="pi pi-times"
+          class="p-button-text p-button-rounded"
+          (click)="closeDetail()"
+          title="Закрыть"
+          aria-label="Закрыть"
+        ></button>
+      </div>
+    </ng-template>
+
+    <div class="library-details">
+      <div class="detail-row" *ngIf="getAddress()">
+        <div class="detail-row-title">Адрес:</div>
+        <div class="detail-row-value">{{ getAddress() }}</div>
+      </div>
+
+      <div class="detail-row" *ngIf="getChiefName()">
+        <div class="detail-row-title">Руководитель:</div>
+        <div class="detail-row-value">{{ getChiefName() }}</div>
+      </div>
+
+      <div class="detail-row" *ngIf="getPublicPhone()">
+        <div class="detail-row-title">Публичный телефон:</div>
+        <div class="detail-row-value">{{ getPublicPhone() }}</div>
+      </div>
+
+      <div class="detail-row" *ngIf="getEmail()">
+        <div class="detail-row-title">Email:</div>
+        <div class="detail-row-value">
+          <a [href]="'mailto:' + getEmail()">{{ getEmail() }}</a>
+        </div>
+      </div>
+
+      <div class="detail-row" *ngIf="getWebsite()">
+        <div class="detail-row-title">Веб-сайт:</div>
+        <div class="detail-row-value">
+          <a [href]="getWebsiteUrl()" target="_blank">{{ getWebsite() }}</a>
+        </div>
+      </div>
+
+      <div class="detail-row" *ngIf="getWorkingHours()">
+        <div class="detail-row-title">Время работы:</div>
+        <div class="detail-row-value">{{ getWorkingHours() }}</div>
+      </div>
+    </div>
+  </p-card>
+</div>
+
+<div class="no-selection" *ngIf="!selectedLibrary">
+  <p-card>
+    <div class="text-center">
+      <i class="pi pi-info-circle" style="font-size: 3rem; color: #ccc"></i>
+      <h3>Выберите библиотеку</h3>
+      <p>
+        Нажмите на строку в таблице результатов поиска, чтобы увидеть подробную
+        информацию о библиотеке.
+      </p>
+    </div>
+  </p-card>
+</div>
